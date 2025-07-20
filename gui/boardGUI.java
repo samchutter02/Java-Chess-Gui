@@ -24,7 +24,7 @@ public class boardGUI {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 JPanel panel = new JPanel();
-                panel.setBackground((i + j) % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE);
+                panel.setBackground((i + j) % 2 == 0 ? Color.DARK_GRAY : Color.WHITE);
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 panel.addMouseListener(new MouseAdapter() {
                     @Override
@@ -43,23 +43,23 @@ public class boardGUI {
     }
 
     private void setupGamePieces() {
-        gameBoardSquares[0][0].setBackground(Color.GREEN);
-        gameBoardSquares[0][1].setBackground(Color.BLUE);
-        gameBoardSquares[0][2].setBackground(Color.RED);
+        // gameBoardSquares[0][0].setBackground(Color.GREEN);
+        // gameBoardSquares[0][1].setBackground(Color.BLUE);
+        // gameBoardSquares[0][2].setBackground(Color.RED);
     }
 
     private void handleMouseClick(JPanel clickedPanel) {
         Color background = clickedPanel.getBackground();
         if (selectedPiece == null) {
-            if (background == Color.GREEN || background == Color.BLUE || background == Color.RED) {
+            if (background == Color.DARK_GRAY || background == Color.WHITE) {
                 selectedPiece = clickedPanel;
-                clickedPanel.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
+                clickedPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             }
         } else {
-            if (background == Color.LIGHT_GRAY || background == Color.WHITE) {
+            if (background == Color.DARK_GRAY || background == Color.WHITE) {
                 clickedPanel.setBackground(selectedPiece.getBackground());
                 int[] oldPosition = findPanelPosition(selectedPiece);
-                selectedPiece.setBackground((oldPosition[0] + oldPosition[1]) % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE);
+                selectedPiece.setBackground((oldPosition[0] + oldPosition[1]) % 2 == 0 ? Color.DARK_GRAY : Color.WHITE);
                 selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 selectedPiece = null;
             }
