@@ -23,9 +23,13 @@ public class boardGUI {
 
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                JPanel panel = new JPanel();
-                panel.setBackground((i + j) % 2 == 0 ? Color.DARK_GRAY : Color.WHITE);
+                JPanel panel = new JPanel(new BorderLayout());
+                panel.setBackground((i + j) % 2 == 0 ? Color.WHITE : Color.BLACK);
                 panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                JLabel label = new JLabel("", SwingConstants.CENTER);
+                label.setFont(new Font("Serif", Font.PLAIN, 36));
+                label.setForeground((i + j) % 2 == 0 ? Color.BLACK : Color.WHITE);
+                panel.add(label, BorderLayout.CENTER);
                 panel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -43,23 +47,53 @@ public class boardGUI {
     }
 
     private void setupGamePieces() {
-        // gameBoardSquares[0][0].setBackground(Color.GREEN);
-        // gameBoardSquares[0][1].setBackground(Color.BLUE);
-        // gameBoardSquares[0][2].setBackground(Color.RED);
+        //black pieces
+        getLabelAt(0, 0).setText("♜");
+        getLabelAt(0, 1).setText("♞");
+        getLabelAt(0, 2).setText("♝");
+        getLabelAt(0, 3).setText("♛");
+        getLabelAt(0, 4).setText("♚");
+        getLabelAt(0, 5).setText("♝");
+        getLabelAt(0, 6).setText("♞");
+        getLabelAt(0, 7).setText("♜");
+        for (int j = 0; j < COLS; j++) {
+            getLabelAt(1, j).setText("♟");
+        }
+        // white pieces
+        getLabelAt(7, 0).setText("♖");
+        getLabelAt(7, 1).setText("♘");
+        getLabelAt(7, 2).setText("♗");
+        getLabelAt(7, 3).setText("♕");
+        getLabelAt(7, 4).setText("♔");
+        getLabelAt(7, 5).setText("♗");
+        getLabelAt(7, 6).setText("♘");
+        getLabelAt(7, 7).setText("♖");
+        for (int j = 0; j < COLS; j++) {
+            getLabelAt(6, j).setText("♙");
+        }
+    }
+
+    private JLabel getLabelAt(int row, int col) {
+        JPanel panel = gameBoardSquares[row][col];
+        return (JLabel) panel.getComponent(0);
     }
 
     private void handleMouseClick(JPanel clickedPanel) {
-        Color background = clickedPanel.getBackground();
+        JLabel clickedLabel = (JLabel) clickedPanel.getComponent(0);
         if (selectedPiece == null) {
-            if (background == Color.DARK_GRAY || background == Color.WHITE) {
+            if (!clickedLabel.getText().isEmpty()) {
                 selectedPiece = clickedPanel;
-                clickedPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+                clickedPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
             }
         } else {
-            if (background == Color.DARK_GRAY || background == Color.WHITE) {
-                clickedPanel.setBackground(selectedPiece.getBackground());
-                int[] oldPosition = findPanelPosition(selectedPiece);
-                selectedPiece.setBackground((oldPosition[0] + oldPosition[1]) % 2 == 0 ? Color.DARK_GRAY : Color.WHITE);
+            if (clickedPanel == selectedPiece) {
+                selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                selectedPiece = null;
+            } else {
+                JLabel selectedLabel = (JLabel) selectedPiece.getComponent(0);
+                //move piece
+                clickedLabel.setText(selectedLabel.getText());
+                selectedLabel.setText("");
                 selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 selectedPiece = null;
             }
@@ -74,6 +108,6 @@ public class boardGUI {
                 }
             }
         }
-        return new int[]{-1, -1}; // Not found
+        return new int[]{-1, -1}; //Not found
     }
 }
