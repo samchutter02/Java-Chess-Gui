@@ -21,23 +21,23 @@ public class boardGUI {
         frame.setLayout(new GridLayout(ROWS, COLS));
         frame.setSize(800, 800);
 
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLS; j++) {
-                JPanel panel = new JPanel(new BorderLayout());
-                panel.setBackground((i + j) % 2 == 0 ? Color.WHITE : Color.BLACK);
-                panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                JLabel label = new JLabel("", SwingConstants.CENTER);
-                label.setFont(new Font("Serif", Font.PLAIN, 36));
-                label.setForeground((i + j) % 2 == 0 ? Color.BLACK : Color.WHITE);
-                panel.add(label, BorderLayout.CENTER);
-                panel.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        handleMouseClick(panel);
-                    }
-                });
-                gameBoardSquares[i][j] = panel;
-                frame.add(panel);
+        for (int i = 0; i < ROWS; i++) { //loop through each row
+            for (int j = 0; j < COLS; j++) { // loop through each column
+            JPanel panel = new JPanel(new BorderLayout()); //create new JPanel for each square
+            panel.setBackground((i + j) % 2 == 0 ? Color.WHITE : Color.BLACK); //aternate square colors
+            panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // add black border to each square
+            JLabel label = new JLabel("", SwingConstants.CENTER); //create label to hold chess piece
+            label.setFont(new Font("Serif", Font.PLAIN, 46)); //set font size for chess pieces
+            label.setForeground((i + j) % 2 == 0 ? Color.BLACK : Color.WHITE); //set icon color (contrast)
+            panel.add(label, BorderLayout.CENTER); //add label to center of panel
+            panel.addMouseListener(new MouseAdapter() { //Add mouse listener for click e
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                handleMouseClick(panel); //handle piece selection/movement
+                }
+            });
+            gameBoardSquares[i][j] = panel; //store panel in the board array
+            frame.add(panel); //add the panel to the frame
             }
         }
 
