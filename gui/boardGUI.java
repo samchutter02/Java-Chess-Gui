@@ -19,7 +19,7 @@ public class boardGUI {
         JFrame frame = new JFrame("Chess Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new GridLayout(ROWS, COLS));
-        frame.setSize(600, 600);
+        frame.setSize(800, 800);
 
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
@@ -83,12 +83,14 @@ public class boardGUI {
         if (selectedPiece == null) {
             if (!clickedLabel.getText().isEmpty()) {
                 selectedPiece = clickedPanel;
-                clickedPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+                clickedPanel.setBorder(BorderFactory.createLineBorder(new Color(0x00FF00), 4)); // Example hex color
             }
         } else {
-            if (clickedPanel == selectedPiece) {
+            if (!clickedLabel.getText().isEmpty()) {
+                // occupied so just deselect
                 selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 selectedPiece = null;
+                return;
             } else {
                 JLabel selectedLabel = (JLabel) selectedPiece.getComponent(0);
                 //move piece
