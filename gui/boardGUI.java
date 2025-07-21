@@ -87,19 +87,19 @@ public class boardGUI {
                 clickedPanel.setBorder(BorderFactory.createLineBorder(new Color(0x00FF00), 4)); // Example hex color
             }
         } else {
-            if (!clickedLabel.getText().isEmpty()) {
-                // occupied so just deselect
-                selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                selectedPiece = null;
-                return;
-            } else {
-                JLabel selectedLabel = (JLabel) selectedPiece.getComponent(0);
-                //move piece
-                clickedLabel.setText(selectedLabel.getText());
-                selectedLabel.setText("");
-                selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                selectedPiece = null;
-            }
+            movePiece(selectedPiece, clickedPanel);
+            selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            selectedPiece = null;
+        }
+    }
+    
+    private void movePiece(JPanel sourcePanel, JPanel targetPanel){
+        JLabel sourceLabel = (JLabel) sourcePanel.getComponent(0);
+        JLabel targetLabel = (JLabel) targetPanel.getComponent(0);
+        
+        if(!sourceLabel.getText().isEmpty()){
+            targetLabel.setText(sourceLabel.getText());
+            sourceLabel.setText("");
         }
     }
 
