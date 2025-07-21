@@ -1,8 +1,8 @@
 package gui;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.*;
 
 public class boardGUI {
 
@@ -14,6 +14,7 @@ public class boardGUI {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new boardGUI().createAndShowGUI());
     }
+    
 
     private void createAndShowGUI() {
         JFrame frame = new JFrame("Chess Game");
@@ -86,19 +87,19 @@ public class boardGUI {
                 clickedPanel.setBorder(BorderFactory.createLineBorder(new Color(0x00FF00), 4)); // Example hex color
             }
         } else {
-            if (!clickedLabel.getText().isEmpty()) {
-                // occupied so just deselect
-                selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                selectedPiece = null;
-                return;
-            } else {
-                JLabel selectedLabel = (JLabel) selectedPiece.getComponent(0);
-                //move piece
-                clickedLabel.setText(selectedLabel.getText());
-                selectedLabel.setText("");
-                selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                selectedPiece = null;
-            }
+            movePiece(selectedPiece, clickedPanel);
+            selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            selectedPiece = null;
+        }
+    }
+    
+    private void movePiece(JPanel sourcePanel, JPanel targetPanel){
+        JLabel sourceLabel = (JLabel) sourcePanel.getComponent(0);
+        JLabel targetLabel = (JLabel) targetPanel.getComponent(0);
+        
+        if(!sourceLabel.getText().isEmpty()){
+            targetLabel.setText(sourceLabel.getText());
+            sourceLabel.setText("");
         }
     }
 
@@ -113,3 +114,4 @@ public class boardGUI {
         return new int[]{-1, -1}; //Not found
     }
 }
+  
