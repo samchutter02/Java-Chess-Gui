@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
+import gui.Gameover;
 
 public class boardGUI {
 
@@ -25,7 +26,7 @@ public class boardGUI {
         for (int i = 0; i < ROWS; i++) { //loop through each row
             for (int j = 0; j < COLS; j++) { // loop through each column
             JPanel panel = new JPanel(new BorderLayout()); //create new JPanel for each square
-            panel.setBackground((i + j) % 2 == 0 ? Color.WHITE : Color.BLACK); //aternate square colors
+            panel.setBackground((i + j) % 2 == 0 ? Color.WHITE : Color.BLACK); //alternate square colors
             panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // add black border to each square
             JLabel label = new JLabel("", SwingConstants.CENTER); //create label to hold chess piece
             label.setFont(new Font("Serif", Font.PLAIN, 46)); //set font size for chess pieces
