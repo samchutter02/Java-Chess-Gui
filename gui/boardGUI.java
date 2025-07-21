@@ -112,4 +112,6 @@ public class boardGUI {
             }
         }
         return new int[]{-1, -1}; //Not found
+    }
+}
   
