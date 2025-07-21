@@ -1,8 +1,8 @@
 package gui;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.*;
 
 public class boardGUI {
 
@@ -14,6 +14,7 @@ public class boardGUI {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new boardGUI().createAndShowGUI());
     }
+    
 
     private void createAndShowGUI() {
         JFrame frame = new JFrame("Chess Game");
@@ -111,5 +112,4 @@ public class boardGUI {
             }
         }
         return new int[]{-1, -1}; //Not found
-    }
-}
+  
