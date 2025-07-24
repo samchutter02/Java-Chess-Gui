@@ -1,10 +1,11 @@
 package gui;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.Arrays;
 import javax.swing.*;
-// import gui.Gameover;
+import gui.Gameover;
 
 public class boardGUI implements Serializable {
 
@@ -24,7 +25,6 @@ public class boardGUI implements Serializable {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new boardGUI().createAndShowGUI());
     }
-    
 
     private void createAndShowGUI() {
         frame = new JFrame("Chess Game");
@@ -93,10 +93,10 @@ public class boardGUI implements Serializable {
             Arrays.fill(boardState[i], "");
         }
         // Set up black pieces
-        boardState[0] = new String[]{"♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"};
+        boardState[0] = new String[] { "♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜" };
         Arrays.fill(boardState[1], "♟");
         // Set up white pieces
-        boardState[7] = new String[]{"♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"};
+        boardState[7] = new String[] { "♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖" };
         Arrays.fill(boardState[6], "♙");
         // clear middle
         for (int i = 2; i <= 5; i++) {
@@ -187,18 +187,31 @@ public class boardGUI implements Serializable {
             selectedPiece = null;
         }
     }
-    
-    private void movePiece(JPanel sourcePanel, JPanel targetPanel){
+
+    private void movePiece(JPanel sourcePanel, JPanel targetPanel) {
         JLabel sourceLabel = (JLabel) sourcePanel.getComponent(0);
         JLabel targetLabel = (JLabel) targetPanel.getComponent(0);
-        
+
         int[] from = findPanelPosition(sourcePanel);
         int[] to = findPanelPosition(targetPanel);
-        
-        if (!boardState[from[0]][from[1]].isEmpty()) {
-            boardState[to[0]][to[1]] = boardState[from[0]][from[1]];
+
+        String moving = boardState[from[0]][from[1]];
+        String captured = boardState[to[0]][to[1]];
+
+        if (!moving.isEmpty()) {
+            if ("♚".equals(captured)) {
+                Gameover.showGameOverMessage("White wins! Black King was captured.");
+                System.exit(0);
+                return;
+            } else if ("♔".equals(captured)) {
+                Gameover.showGameOverMessage("Black wins! White King was captured.");
+                System.exit(0);
+                return;
+            }
+
+            boardState[to[0]][to[1]] = moving;
             boardState[from[0]][from[1]] = "";
-            targetLabel.setText(getStyledPiece(boardState[to[0]][to[1]]));
+            targetLabel.setText(getStyledPiece(moving));
             sourceLabel.setText("");
         }
     }
@@ -207,11 +220,11 @@ public class boardGUI implements Serializable {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 if (gameBoardSquares[i][j] == panel) {
-                    return new int[]{i, j};
+                    return new int[] { i, j };
                 }
             }
         }
-        return new int[]{-1, -1}; //Not found
+        return new int[] { -1, -1 }; // Not found
     }
 
     // Settings dialog
@@ -226,7 +239,8 @@ public class boardGUI implements Serializable {
         lightButton.setBackground(lightSquareColor);
         lightButton.addActionListener(e -> {
             Color c = JColorChooser.showDialog(dialog, "Choose Light Square Color", lightSquareColor);
-            if (c != null) lightButton.setBackground(c);
+            if (c != null)
+                lightButton.setBackground(c);
         });
 
         JLabel darkLabel = new JLabel("Dark Square Color:");
@@ -234,22 +248,26 @@ public class boardGUI implements Serializable {
         darkButton.setBackground(darkSquareColor);
         darkButton.addActionListener(e -> {
             Color c = JColorChooser.showDialog(dialog, "Choose Dark Square Color", darkSquareColor);
-            if (c != null) darkButton.setBackground(c);
+            if (c != null)
+                darkButton.setBackground(c);
         });
 
         // Piece style
         JLabel pieceLabel = new JLabel("Piece Style:");
-        String[] pieceStyles = {"Classic", "Modern"};
+        String[] pieceStyles = { "Classic", "Modern" };
         JComboBox<String> pieceCombo = new JComboBox<>(pieceStyles);
         pieceCombo.setSelectedItem(pieceStyle);
 
         // Board size
         JLabel sizeLabel = new JLabel("Board Size:");
-        String[] sizes = {"Small", "Medium", "Large"};
+        String[] sizes = { "Small", "Medium", "Large" };
         JComboBox<String> sizeCombo = new JComboBox<>(sizes);
-        if (boardSize <= 500) sizeCombo.setSelectedIndex(0);
-        else if (boardSize <= 800) sizeCombo.setSelectedIndex(1);
-        else sizeCombo.setSelectedIndex(2);
+        if (boardSize <= 500)
+            sizeCombo.setSelectedIndex(0);
+        else if (boardSize <= 800)
+            sizeCombo.setSelectedIndex(1);
+        else
+            sizeCombo.setSelectedIndex(2);
 
         // OK/Cancel
         JButton ok = new JButton("OK");
@@ -271,11 +289,16 @@ public class boardGUI implements Serializable {
         });
         cancel.addActionListener(e -> dialog.dispose());
 
-        dialog.add(lightLabel); dialog.add(lightButton);
-        dialog.add(darkLabel); dialog.add(darkButton);
-        dialog.add(pieceLabel); dialog.add(pieceCombo);
-        dialog.add(sizeLabel); dialog.add(sizeCombo);
-        dialog.add(ok); dialog.add(cancel);
+        dialog.add(lightLabel);
+        dialog.add(lightButton);
+        dialog.add(darkLabel);
+        dialog.add(darkButton);
+        dialog.add(pieceLabel);
+        dialog.add(pieceCombo);
+        dialog.add(sizeLabel);
+        dialog.add(sizeCombo);
+        dialog.add(ok);
+        dialog.add(cancel);
 
         dialog.setLocationRelativeTo(frame);
         dialog.setVisible(true);
