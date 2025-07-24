@@ -1,9 +1,10 @@
 package gui;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.Arrays;
+import javax.swing.*;
+// import gui.Gameover;
 
 public class boardGUI implements Serializable {
 
@@ -23,6 +24,7 @@ public class boardGUI implements Serializable {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new boardGUI().createAndShowGUI());
     }
+    
 
     private void createAndShowGUI() {
         frame = new JFrame("Chess Game");
@@ -54,15 +56,12 @@ public class boardGUI implements Serializable {
         menuBar.add(gameMenu);
         frame.setJMenuBar(menuBar);
 
-        // Menu optiinos
+        // Menu options
         newGameItem.addActionListener(e -> resetBoard());
         saveGameItem.addActionListener(e -> saveGame());
         loadGameItem.addActionListener(e -> loadGame());
         settingsItem.addActionListener(e -> openSettingsDialog());
 
-        // Board setup
-        frame.getContentPane().removeAll();
-        frame.setLayout(new GridLayout(ROWS, COLS));
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 JPanel panel = new JPanel(new BorderLayout());
@@ -178,23 +177,29 @@ public class boardGUI implements Serializable {
                 clickedPanel.setBorder(BorderFactory.createLineBorder(new Color(0x00FF00), 4));
             }
         } else {
-            if (!clickedLabel.getText().isEmpty()) {
-                // occupied so just deselect
+            if (clickedPanel == selectedPiece) {
                 selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 selectedPiece = null;
                 return;
-            } else {
-                JLabel selectedLabel = (JLabel) selectedPiece.getComponent(0);
-                int[] from = findPanelPosition(selectedPiece);
-                // Move piece in boardState
-                boardState[clickedPos[0]][clickedPos[1]] = boardState[from[0]][from[1]];
-                boardState[from[0]][from[1]] = "";
-                // Update GUI
-                clickedLabel.setText(getStyledPiece(selectedLabel.getText()));
-                selectedLabel.setText("");
-                selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                selectedPiece = null;
             }
+            movePiece(selectedPiece, clickedPanel);
+            selectedPiece.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            selectedPiece = null;
+        }
+    }
+    
+    private void movePiece(JPanel sourcePanel, JPanel targetPanel){
+        JLabel sourceLabel = (JLabel) sourcePanel.getComponent(0);
+        JLabel targetLabel = (JLabel) targetPanel.getComponent(0);
+        
+        int[] from = findPanelPosition(sourcePanel);
+        int[] to = findPanelPosition(targetPanel);
+        
+        if (!boardState[from[0]][from[1]].isEmpty()) {
+            boardState[to[0]][to[1]] = boardState[from[0]][from[1]];
+            boardState[from[0]][from[1]] = "";
+            targetLabel.setText(getStyledPiece(boardState[to[0]][to[1]]));
+            sourceLabel.setText("");
         }
     }
 
